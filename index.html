@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تفاعلي: Visual Basic - الجملة الشرطية</title>
+    <style>
+        :root {
+            --primary-color: #68217A;
+            --secondary-color: #007ACC;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 { text-align: center; color: var(--primary-color); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input[type="text"] {
+            width: 100%; padding: 12px; border: 2px solid #ccc;
+            border-radius: 6px; box-sizing: border-box; font-size: 16px;
+        }
+        .question-card {
+            background: #fafafa; border-right: 5px solid var(--secondary-color);
+            padding: 15px 20px; margin-bottom: 20px; border-radius: 6px;
+        }
+        .question-title { font-weight: bold; margin-bottom: 12px; font-size: 1.1em; }
+        .options label {
+            display: block; background: #fff; padding: 10px 15px;
+            margin-bottom: 8px; border: 1px solid #ddd; border-radius: 4px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .options label:hover { background: #eef7ff; }
+        .code-block {
+            background: #2d2d2d; color: #f8f8f2; padding: 10px 15px;
+            border-radius: 6px; font-family: monospace; margin: 8px 0; direction: ltr; text-align: left;
+        }
+        button {
+            background: var(--primary-color); color: #fff; border: none;
+            padding: 14px 28px; font-size: 18px; border-radius: 6px;
+            cursor: pointer; width: 100%; transition: 0.3s;
+        }
+        button:hover { background: #521961; }
+        .hidden { display: none; }
+        
+        /* تصميم شهادة التقدير */
+        #certificate {
+            border: 10px solid var(--primary-color);
+            padding: 40px; text-align: center; background: #fff;
+            margin-top: 20px; position: relative; border-radius: 10px;
+        }
+        .cert-title { font-size: 28px; color: var(--primary-color); font-weight: bold; }
+        .student-name { font-size: 32px; color: var(--secondary-color); margin: 20px 0; text-decoration: underline; }
+        .feedback { margin-top: 30px; border-top: 2px dashed #ccc; padding-top: 20px; }
+        .correct { color: green; font-weight: bold; }
+        .incorrect { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- الشاشة الأولى: تسجيل الدخول -->
+    <div id="start-screen">
+        <h1>اختبار البرمجة بلغة Visual Basic</h1>
+        <h2>الدرس: الجملة الشرطية IF Condition</h2>
+        <div class="form-group">
+            <label for="student-name-input">أدخل اسمك الثلاثي للبدء إصدار الشهادة:</label>
+            <input type="text" id="student-name-input" placeholder="اسم الطالب..." required>
+        </div>
+        <button onclick="startQuiz()">بدء الاختبار الان</button>
+    </div>
+
+    <!-- الشاشة الثانية: الأسئلة -->
+    <div id="quiz-screen" class="hidden">
+        <h2 id="welcome-msg"></h2>
+        <form id="quiz-form">
+            <!-- سيتم إنشاء الأسئلة ديناميكياً بواسطة JavaScript -->
+        </form>
+        <button onclick="submitQuiz()">إنهاء الاختبار وعرض الشهادة</button>
+    </div>
+
+    <!-- الشاشة الثالثة: النتيجة والشهادة والتصحيح -->
+    <div id="result-screen" class="hidden">
+        <div id="certificate">
+            <div class="cert-title">📜 شهادة إنجاز ومواظبة</div>
+            <p>تشهد إدارة المادة بأن الطالب/ـة:</p>
+            <div class="student-name" id="cert-name"></div>
+            <p>قد أتم بنجاح اختبار البرمجة بلغة Visual Basic (الجملة الشرطية)</p>
+            <h3>الدرجة الحاصل عليها: <span id="cert-score"></span> / 10</h3>
+            <p id="cert-date"></p>
+        </div>
+        <button onclick="window.print()" style="margin-top: 15px; background: #28a745;">طباعة/حفظ الشهادة PDF</button>
+
+        <div class="feedback">
+            <h3>مراجعة الإجابات والتصحيح المفصل:</h3>
+            <div id="feedback-content"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        q: "أداة التحكّم المستخدمة لتوفير مساحة يُسمح للمستخدم بإدخال وتعديل النصوص داخلها أثناء التشغيل هي:",
+        options: ["Label", "TextBox", "Button", "Form"],
+        answer: 1,
+        explanation: "TextBox تُتيح إدخال وتعديل النصوص، بينما Label للعرض فقط."
+    },
+    {
+        q: "أداة Label تُستخدم عادةً لإظهار عناوين أو نصوص لا يمكن للمستخدم تعديلها مباشرة أثناء التشغيل.",
+        options: ["صواب", "خطأ"],
+        answer: 0,
+        explanation: "Label أداة للعرض الثابت وتغيير قيمتها يتم من خلال الكود فقط."
+    },
+    {
+        q: "ما النتيجة المتوقعة لـ Label3.Text إذا كانت قيمة TextBox1 تساوي 40؟",
+        code: "If Val(TextBox1.Text) >= 50 Then\n    Label3.Text = \"Success\"\nElse\n    Label3.Text = \"Fail\"\nEnd If",
+        options: ["Success", "Fail", "40", "خطأ برمجي"],
+        answer: 1,
+        explanation: "الدرجة 40 أقل من 50، بالتالي يتم تنفيذ كود Else وتظهر كلمة Fail."
+    },
+    {
+        q: "ما الدالة البرمجية المستخدمة لتحويل النص المدخل من TextBox إلى قيمة رقمية للمقارنة الشرطية؟",
+        options: ["Val()", "Text()", "Convert()", "String()"],
+        answer: 0,
+        explanation: "الدالة Val تحول النصوص الرقمية إلى قيم حسابية قابلة للمقارنة."
+    },
+    {
+        q: "الحدث الذي يُطلق تنفيذ كود تقييم الدرجة Button1_Click يحدث عند:",
+        options: ["كتابة النص في التكست", "النقر على الزر (Button)", "تحريك الماوس", "فتح البرنامج"],
+        answer: 1,
+        explanation: "Button1_Click يرتبط بنقر المستخدم على أداة الزر."
+    },
+    {
+        q: "عند استخدام تركيب If...ElseIf المتعدد، يتم التحقق من جميع الشروط حتى لو تحقق الشرط الأول.",
+        options: ["صواب", "خطأ"],
+        answer: 1,
+        explanation: "في ElseIf بمجرد تحقق أي شرط يتجاوز المحرر باقي الشروط الشرطية."
+    },
+    {
+        q: "في كود التقديرات المركب، ما الحرف الناتج إذا دخل الطالب درجة قدرها 70؟",
+        options: ["A", "B", "C", "D"],
+        answer: 2,
+        explanation: "الدرجة 70 تحقق الشرط (Score >= 65) والتقدير هو C."
+    },
+    {
+        q: "الجملة الشرطية المستخدمة عند وجود أكثر من احتمال واختبار عدة شروط متتالية هي:",
+        options: ["If...Then فقط", "ElseIf", "Loop", "Dim"],
+        answer: 1,
+        explanation: "ElseIf تتيح تفقد احتمالات وشروط متعددة متتالية."
+    },
+    {
+        q: "في الكود الموضح، ما التقدير الذي سيتلاقاه الطالب إذا كانت درجته 49؟",
+        code: "If Score >= 85 Then ...\nElseIf Score >= 50 Then Label4.Text = \"D\"\nElse Label4.Text = \"F\"\nEnd If",
+        options: ["D", "F", "Fail", "E"],
+        answer: 1,
+        explanation: "بما أن 49 أقل من 50، ينتقل الكود لـ Else وتكون النتيجة F."
+    },
+    {
+        q: "لتشغيل واختبار مشروع Visual Basic وملاحظة النتيجة نضغط على زر التشغيل الأخضر أو مفتاح F5.",
+        options: ["صواب", "خطأ"],
+        answer: 0,
+        explanation: "مفتاح F5 أو خيار Start Debugging يطلق تنفيذ واختبار المشروع."
+    }
+];
+
+let studentName = "";
+
+function startQuiz() {
+    const input = document.getElementById('student-name-input').value.trim();
+    if (!input) { alert('يرجى إدخال اسمك أولاً!'); return; }
+    studentName = input;
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    document.getElementById('welcome-msg').innerText = "مرحباً بك يا " + studentName;
+    renderQuestions();
+}
+
+function renderQuestions() {
+    const form = document.getElementById('quiz-form');
+    quizData.forEach((q, index) => {
+        let qHtml = `<div class="question-card">
+            <div class="question-title">س${index + 1}: ${q.q}</div>`;
+        if(q.code) { qHtml += `<pre class="code-block">${q.code}</pre>`; }
+        qHtml += `<div class="options">`;
+        q.options.forEach((opt, optIdx) => {
+            qHtml += `<label><input type="radio" name="q${index}" value="${optIdx}"> ${opt}</label>`;
+        });
+        qHtml += `</div></div>`;
+        form.innerHTML += qHtml;
+    });
+}
+
+function submitQuiz() {
+    let score = 0;
+    let feedbackHtml = "";
+
+    quizData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const userAns = selected ? parseInt(selected.value) : -1;
+        
+        if (userAns === q.answer) {
+            score++;
+            feedbackHtml += `<p class="correct">✔ س${i + 1}: إجابة صحيحة!</p>`;
+        } else {
+            const correctText = q.options[q.answer];
+            feedbackHtml += `<p class="incorrect">✖ س${i + 1}: إجابة خاطئة. الإجابة الصحيحة هي: (${correctText})<br><small>💡 التوضيح: ${q.explanation}</small></p>`;
+        }
+    });
+
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    
+    document.getElementById('cert-name').innerText = studentName;
+    document.getElementById('cert-score').innerText = score;
+    document.getElementById('cert-date').innerText = "تاريخ الإنجاز: " + new Date().toLocaleDateString('ar-EG');
+    document.getElementById('feedback-content').innerHTML = feedbackHtml;
+}
+</script>
+</body>
+</html>

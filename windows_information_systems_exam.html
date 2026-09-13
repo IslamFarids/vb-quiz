@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Information Systems &amp; Windows OS — Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDF0F5;
+    --surface:#FFFFFF;
+    --ink:#12203D;
+    --muted:#5E6E8C;
+    --accent:#2F6FED;
+    --accent-soft:#E4ECFE;
+    --success:#1F9D6C;
+    --success-soft:#E4F7EE;
+    --error:#D64545;
+    --error-soft:#FCE8E8;
+    --border:#DDE3EE;
+
+    --c1:#2F6FED; /* Processing */
+    --c2:#7C5CFA; /* Memory */
+    --c3:#1FA6C9; /* Input */
+    --c4:#E08A2E; /* Output */
+    --c5:#1F9D6C; /* Storage */
+    --c6:#C24B9A; /* Desktop */
+    --c7:#4A6FE3; /* Windows */
+    --c8:#B08800; /* Taskbar */
+    --c9:#D64545; /* Settings */
+    --c10:#0E8F8F; /* Accessories */
+    --c11:#8A5A2B; /* Icons */
+    --c12:#5C6BC0; /* Shortcuts */
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    padding-bottom:80px;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    margin:0;
+  }
+
+  .top{
+    background:linear-gradient(135deg,#12203D 0%, #1E3A6B 60%, #2F6FED 130%);
+    color:#fff;
+    padding:36px 20px 30px;
+  }
+  .top-inner{max-width:760px;margin:0 auto;}
+  .top h1{font-size:26px;font-weight:700;letter-spacing:-0.01em;}
+  .top p{color:#C9D6F2;margin:8px 0 0;font-size:14.5px;max-width:560px;}
+
+  .progress-wrap{
+    position:sticky;top:0;z-index:20;
+    background:rgba(237,240,245,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:10px 20px;
+  }
+  .progress-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;}
+  .progress-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-label{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;}
+
+  main{max-width:760px;margin:0 auto;padding:26px 20px 0;}
+
+  .topic-block{margin-bottom:34px;}
+  .topic-head{
+    display:flex;align-items:baseline;gap:10px;
+    margin-bottom:12px;
+    padding-bottom:8px;
+    border-bottom:2px solid var(--tcolor);
+  }
+  .topic-num{
+    font-family:'Space Grotesk';font-weight:700;font-size:13px;color:var(--tcolor);
+    background:color-mix(in srgb, var(--tcolor) 14%, white);
+    border-radius:5px;padding:3px 8px;
+  }
+  .topic-head h2{font-size:16.5px;color:var(--ink);}
+
+  .q{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:4px solid var(--tcolor);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-bottom:12px;
+  }
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .q-index{font-size:12px;color:var(--muted);font-weight:600;}
+  .q-type{font-size:11px;color:var(--tcolor);font-weight:600;background:color-mix(in srgb, var(--tcolor) 10%, white);padding:2px 7px;border-radius:10px;}
+  .q-text{font-size:15px;color:var(--ink);font-weight:500;margin-bottom:12px;}
+
+  .options{display:flex;flex-direction:column;gap:7px;}
+  .opt{
+    display:flex;align-items:center;gap:10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:14px;
+    transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--tcolor);background:color-mix(in srgb, var(--tcolor) 5%, white);}
+  .opt input{accent-color:var(--tcolor);}
+  .opt.selected{border-color:var(--tcolor);background:color-mix(in srgb, var(--tcolor) 8%, white);}
+
+  .fill-row{display:flex;gap:0;max-width:320px;}
+  .fill-row input[type=text]{
+    flex:1;
+    border:1px solid var(--border);
+    border-bottom:2px solid var(--tcolor);
+    border-radius:6px;
+    padding:9px 12px;
+    font-size:14px;
+    font-family:'Inter';
+    color:var(--ink);
+    background:#FAFBFD;
+  }
+  .fill-row input[type=text]:focus{outline:none;border-color:var(--tcolor);}
+
+  .q.correct{border-left-color:var(--success);background:var(--success-soft);}
+  .q.incorrect{border-left-color:var(--error);background:var(--error-soft);}
+  .opt.correct-answer{border-color:var(--success);background:var(--success-soft);}
+  .opt.wrong-answer{border-color:var(--error);background:var(--error-soft);}
+
+  .explain{
+    margin-top:10px;font-size:13px;padding-top:9px;border-top:1px dashed var(--border);color:var(--muted);
+    display:none;
+  }
+  .explain b{color:var(--ink);}
+  .verdict{font-size:12.5px;font-weight:700;margin-top:2px;display:none;}
+  .verdict.ok{color:var(--success);}
+  .verdict.no{color:var(--error);}
+
+  .action-bar{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:14px 20px;
+    display:flex;justify-content:center;
+    box-shadow:0 -6px 18px rgba(18,32,61,0.08);
+    z-index:30;
+  }
+  .action-bar-inner{max-width:760px;width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;}
+  .hint{font-size:12.5px;color:var(--muted);}
+  button.submit{
+    background:var(--accent);color:#fff;border:none;
+    font-family:'Space Grotesk';font-weight:600;font-size:14.5px;
+    padding:11px 24px;border-radius:7px;cursor:pointer;
+    transition:transform .1s, background .15s;
+  }
+  button.submit:hover{background:#2559C7;}
+  button.submit:active{transform:scale(0.98);}
+  button.retry{
+    background:transparent;color:var(--accent);border:1.5px solid var(--accent);
+    font-family:'Space Grotesk';font-weight:600;font-size:14px;
+    padding:9px 18px;border-radius:7px;cursor:pointer;
+  }
+
+  .results{
+    max-width:760px;margin:20px auto 0;padding:0 20px;
+    display:none;
+  }
+  .score-card{
+    background:linear-gradient(135deg,#12203D, #2F6FED);
+    color:#fff;border-radius:12px;padding:24px 26px;
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:16px;
+  }
+  .score-big{font-family:'Space Grotesk';font-size:42px;font-weight:700;}
+  .score-sub{font-size:13px;color:#C9D6F2;margin-top:4px;}
+  .topic-breakdown{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(max-width:520px){.topic-breakdown{grid-template-columns:1fr;}}
+  .tb-row{
+    background:var(--surface);border:1px solid var(--border);border-radius:7px;
+    padding:9px 12px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .tb-row .name{color:var(--muted);}
+  .tb-row .frac{font-weight:700;}
+
+  .unanswered-flag{font-size:11px;color:var(--error);font-weight:600;margin-left:6px;}
+
+  ::selection{background:var(--accent-soft);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <h1>Information Systems &amp; Windows OS</h1>
+    <p>30-question exam covering hardware processing, memory/input/output/storage units, and the Windows desktop, taskbar, settings, accessories, icons and shortcuts.</p>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 30 answered</div>
+  </div>
+</div>
+
+<main id="examRoot"></main>
+
+<div class="results" id="results">
+  <div class="score-card">
+    <div>
+      <div class="score-sub">YOUR SCORE</div>
+      <div class="score-big" id="scoreBig">0 / 30</div>
+      <div class="score-sub" id="scorePct">0%</div>
+    </div>
+    <button class="retry" id="retryBtn">Retake exam</button>
+  </div>
+  <div class="topic-breakdown" id="topicBreakdown"></div>
+</div>
+
+<div class="action-bar">
+  <div class="action-bar-inner">
+    <span class="hint" id="hintText">Answer all questions, then submit to see your score.</span>
+    <button class="submit" id="submitBtn">Submit exam</button>
+  </div>
+</div>
+
+<script>
+const TOPICS = [
+  {id:1, name:"Processing (CPU)", color:"var(--c1)"},
+  {id:2, name:"Memory Units &amp; Measurement", color:"var(--c2)"},
+  {id:3, name:"Input Units &amp; Measurement", color:"var(--c3)"},
+  {id:4, name:"Output Units &amp; Measurement", color:"var(--c4)"},
+  {id:5, name:"Storage Units &amp; Measurement", color:"var(--c5)"},
+  {id:6, name:"Desktop Properties", color:"var(--c6)"},
+  {id:7, name:"Window Properties", color:"var(--c7)"},
+  {id:8, name:"Taskbar Properties", color:"var(--c8)"},
+  {id:9, name:"Settings (Account / Language / Date / Time)", color:"var(--c9)"},
+  {id:10, name:"Windows Accessories Programs", color:"var(--c10)"},
+  {id:11, name:"Icons: Properties, Views, Size, Copy/Paste/Move, Compression", color:"var(--c11)"},
+  {id:12, name:"Windows Shortcuts", color:"var(--c12)"}
+];
+
+const QUESTIONS = [
+  // Topic 1 — Processing
+  {topic:1, type:"mcq", q:"What is the primary function of the CPU (Central Processing Unit) in a computer system?",
+   options:["Store data permanently","Execute instructions and perform calculations","Display output to the screen","Connect to the internet"], answer:1,
+   explain:"The CPU is the 'brain' of the computer — it fetches, decodes and executes instructions and performs calculations."},
+  {topic:1, type:"tf", q:"CPU speed is commonly measured in Gigahertz (GHz).",
+   options:["True","False"], answer:0,
+   explain:"Clock speed, which indicates how many cycles a CPU can perform per second, is measured in Gigahertz (GHz)."},
+  {topic:1, type:"fill", q:"The general unit used to measure how many cycles/instructions a processor performs per second is called ______.",
+   answer:"hertz", explain:"Hertz (Hz) measures cycles per second; CPU speed is usually expressed in GHz (billions of Hz)."},
+
+  // Topic 2 — Memory
+  {topic:2, type:"mcq", q:"Which of the following lists memory units correctly from smallest to largest?",
+   options:["GB, MB, KB, TB","KB, MB, GB, TB","TB, GB, MB, KB","MB, KB, TB, GB"], answer:1,
+   explain:"The correct increasing order is Kilobyte → Megabyte → Gigabyte → Terabyte."},
+  {topic:2, type:"tf", q:"RAM (Random Access Memory) is volatile, meaning it loses its data when the power is turned off.",
+   options:["True","False"], answer:0,
+   explain:"RAM only holds data while the computer is powered on; it is cleared when the power is cut."},
+
+  // Topic 3 — Input
+  {topic:3, type:"mcq", q:"Which of the following is an example of an input device?",
+   options:["Monitor","Printer","Keyboard","Speaker"], answer:2,
+   explain:"A keyboard sends data into the computer, making it an input device; the others are output devices."},
+  {topic:3, type:"fill", q:"The device that converts a printed document or photo into a digital image is called a ______.",
+   answer:"scanner", explain:"A scanner is an input device used to digitize printed material."},
+
+  // Topic 4 — Output
+  {topic:4, type:"mcq", q:"Which unit is commonly used to describe the resolution of a monitor?",
+   options:["Hertz","Pixels","Bytes","Bits per second"], answer:1,
+   explain:"Monitor resolution is expressed as a number of pixels (e.g., 1920 x 1080)."},
+  {topic:4, type:"tf", q:"A printer is considered an output device because it produces a physical (hard) copy of digital data.",
+   options:["True","False"], answer:0,
+   explain:"Printers convert digital files into printed pages, which is an output operation."},
+
+  // Topic 5 — Storage
+  {topic:5, type:"mcq", q:"Which of the following storage units represents the largest amount of data?",
+   options:["Kilobyte (KB)","Terabyte (TB)","Megabyte (MB)","Byte (B)"], answer:1,
+   explain:"A Terabyte is larger than a Gigabyte, Megabyte, Kilobyte and Byte."},
+  {topic:5, type:"fill", q:"1024 Megabytes are equal to 1 ______.",
+   answer:"gigabyte", explain:"1024 MB = 1 GB, following the binary (base-1024) convention for storage units."},
+  {topic:5, type:"tf", q:"A Solid State Drive (SSD) is generally faster than a traditional Hard Disk Drive (HDD).",
+   options:["True","False"], answer:0,
+   explain:"SSDs use flash memory with no moving parts, making read/write speeds significantly faster than HDDs."},
+
+  // Topic 6 — Desktop
+  {topic:6, type:"mcq", q:"Which of the following is a property that can be personalized directly on the Windows Desktop?",
+   options:["CPU clock speed","Background wallpaper","RAM capacity","Printer ink level"], answer:1,
+   explain:"The desktop background (wallpaper) is a personalization setting; hardware specs like CPU/RAM are not changed from the desktop."},
+  {topic:6, type:"mcq", q:"What is the small graphical picture representing a program, file or shortcut on the desktop called?",
+   options:["Widget","Icon","Cursor","Taskbar"], answer:1,
+   explain:"An icon is the small image used to represent a file, folder, application or shortcut."},
+
+  // Topic 7 — Windows (window controls)
+  {topic:7, type:"mcq", q:"Which button is used to make an open window fill the entire screen?",
+   options:["Minimize","Maximize","Close","Restore Down"], answer:1,
+   explain:"The Maximize button expands a window to fill the whole screen."},
+  {topic:7, type:"tf", q:"You can resize an open window by dragging its edges or corners with the mouse.",
+   options:["True","False"], answer:0,
+   explain:"Dragging the border or corner of a non-maximized window changes its width and/or height."},
+
+  // Topic 8 — Taskbar
+  {topic:8, type:"mcq", q:"Which of the following is typically found on the Windows Taskbar?",
+   options:["Only the Recycle Bin","Start button, search box, and system tray","Only currently open documents","Desktop wallpaper settings"], answer:1,
+   explain:"The Taskbar contains the Start button, a search box, pinned/open app icons, and the system tray on the right."},
+  {topic:8, type:"fill", q:"The area at the right end of the Taskbar showing the clock, volume and network icons is called the ______.",
+   answer:"system tray", accept:["system tray","notification area"],
+   explain:"This area is called the system tray (also known as the notification area)."},
+
+  // Topic 9 — Settings
+  {topic:9, type:"mcq", q:"Where in Windows Settings can you change the operating system's display language?",
+   options:["Time &amp; Language","Accounts","Privacy","Devices"], answer:0,
+   explain:"The 'Time & Language' section of Settings controls display language, region and keyboard settings."},
+  {topic:9, type:"mcq", q:"Which Settings category lets you add or switch a Microsoft account on a Windows computer?",
+   options:["System","Accounts","Update &amp; Security","Personalization"], answer:1,
+   explain:"The 'Accounts' section manages sign-in options, user accounts, and Microsoft account settings."},
+  {topic:9, type:"tf", q:"Windows can be set to automatically update the date and time from the internet.",
+   options:["True","False"], answer:0,
+   explain:"In Time & Language settings, 'Set time automatically' syncs the clock with an internet time server."},
+
+  // Topic 10 — Accessories
+  {topic:10, type:"mcq", q:"Which built-in Windows Accessories program is used for basic plain-text editing?",
+   options:["Paint","Notepad","Calculator","Snipping Tool"], answer:1,
+   explain:"Notepad is a simple plain-text editor included with Windows."},
+  {topic:10, type:"mcq", q:"Which Windows Accessories program is used for drawing and editing simple images?",
+   options:["Notepad","Paint","Character Map","WordPad"], answer:1,
+   explain:"Paint is a basic drawing and image-editing application included in Windows Accessories."},
+  {topic:10, type:"fill", q:"The Windows Accessories tool used to capture a screenshot of a chosen area of the screen is called the ______.",
+   answer:"snipping tool", explain:"The Snipping Tool lets users capture and annotate a selected portion of the screen."},
+
+  // Topic 11 — Icons
+  {topic:11, type:"mcq", q:"Which keyboard shortcut is used to copy a selected file or icon?",
+   options:["Ctrl + V","Ctrl + C","Ctrl + X","Ctrl + Z"], answer:1,
+   explain:"Ctrl + C copies the selected item to the clipboard; Ctrl + V pastes it elsewhere."},
+  {topic:11, type:"mcq", q:"Which of the following is NOT a valid icon view option inside a Windows folder?",
+   options:["Large icons","List","Tiles","Bold"], answer:3,
+   explain:"'Bold' is a text style, not a folder view; valid views include Large/Medium/Small icons, List, Details, Tiles and Content."},
+  {topic:11, type:"fill", q:"A compressed (zipped) folder in Windows commonly has the file extension .______",
+   answer:"zip", explain:"Compressed folders typically use the .zip file extension."},
+
+  // Topic 12 — Shortcuts
+  {topic:12, type:"mcq", q:"Which keyboard shortcut opens Task Manager directly?",
+   options:["Ctrl + Alt + Delete","Ctrl + Shift + Esc","Alt + F4","Windows + L"], answer:1,
+   explain:"Ctrl + Shift + Esc opens Task Manager instantly, without going through an extra menu."},
+  {topic:12, type:"mcq", q:"What does the shortcut Alt + F4 do?",
+   options:["Opens File Explorer","Closes the currently active window","Locks the computer","Opens the Start Menu"], answer:1,
+   explain:"Alt + F4 closes the active window or application."},
+  {topic:12, type:"tf", q:"Pressing Windows + D minimizes all open windows and shows the desktop.",
+   options:["True","False"], answer:0,
+   explain:"Windows + D toggles between showing the desktop and restoring all open windows."}
+];
+
+const root = document.getElementById('examRoot');
+const state = {}; // index -> selected value
+
+function normalizeText(s){
+  return s.trim().toLowerCase().replace(/^the\s+/,'').replace(/[.]$/,'');
+}
+
+function render(){
+  let html = "";
+  TOPICS.forEach(topic=>{
+    const qs = QUESTIONS.map((q,i)=>({...q, idx:i})).filter(q=>q.topic===topic.id);
+    if(qs.length===0) return;
+    html += `<div class="topic-block" style="--tcolor:${topic.color}">
+      <div class="topic-head">
+        <span class="topic-num">${String(topic.id).padStart(2,'0')}</span>
+        <h2>${topic.name}</h2>
+      </div>`;
+    qs.forEach(q=>{
+      html += renderQuestion(q, topic.color);
+    });
+    html += `</div>`;
+  });
+  root.innerHTML = html;
+  attachHandlers();
+}
+
+function renderQuestion(q, color){
+  const typeLabel = q.type==="mcq" ? "Multiple choice" : q.type==="tf" ? "True / False" : "Fill in the blank";
+  let body = "";
+  if(q.type==="mcq" || q.type==="tf"){
+    body = `<div class="options">` + q.options.map((opt,oi)=>`
+      <label class="opt" data-qidx="${q.idx}" data-oi="${oi}">
+        <input type="radio" name="q${q.idx}" value="${oi}">
+        <span>${opt}</span>
+      </label>`).join("") + `</div>`;
+  } else {
+    body = `<div class="fill-row">
+      <input type="text" data-qidx="${q.idx}" placeholder="Type your answer…">
+    </div>`;
+  }
+  return `<div class="q" id="qcard-${q.idx}" style="--tcolor:${color}">
+    <div class="q-meta">
+      <span class="q-index">Question ${q.idx+1} of ${QUESTIONS.length}</span>
+      <span class="q-type">${typeLabel}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+    ${body}
+    <div class="verdict" id="verdict-${q.idx}"></div>
+    <div class="explain" id="explain-${q.idx}"><b>Explanation:</b> <span></span></div>
+  </div>`;
+}
+
+function attachHandlers(){
+  document.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qidx = el.dataset.qidx;
+      document.querySelectorAll(`.opt[data-qidx="${qidx}"]`).forEach(o=>o.classList.remove('selected'));
+      el.classList.add('selected');
+      state[qidx] = parseInt(el.dataset.oi);
+      updateProgress();
+    });
+  });
+  document.querySelectorAll('input[type=text]').forEach(el=>{
+    el.addEventListener('input', ()=>{
+      state[el.dataset.qidx] = el.value;
+      updateProgress();
+    });
+  });
+}
+
+function updateProgress(){
+  const answered = Object.keys(state).filter(k=>state[k]!==undefined && state[k]!=="" ).length;
+  const pct = Math.round((answered/QUESTIONS.length)*100);
+  document.getElementById('progressFill').style.width = pct+"%";
+  document.getElementById('progressLabel').textContent = `${answered} / ${QUESTIONS.length} answered`;
+}
+
+function submitExam(){
+  let score = 0;
+  const topicScores = {};
+  TOPICS.forEach(t=>topicScores[t.id]={correct:0,total:0});
+
+  QUESTIONS.forEach((q,i)=>{
+    topicScores[q.topic].total++;
+    const card = document.getElementById(`qcard-${i}`);
+    const verdict = document.getElementById(`verdict-${i}`);
+    const explainBox = document.getElementById(`explain-${i}`);
+    explainBox.style.display = "block";
+    explainBox.querySelector('span').textContent = " " + q.explain;
+    verdict.style.display = "block";
+
+    let isCorrect = false;
+    if(q.type==="mcq" || q.type==="tf"){
+      const userAns = state[i];
+      isCorrect = userAns === q.answer;
+      document.querySelectorAll(`.opt[data-qidx="${i}"]`).forEach(o=>{
+        const oi = parseInt(o.dataset.oi);
+        if(oi === q.answer) o.classList.add('correct-answer');
+        if(userAns!==undefined && oi === userAns && oi !== q.answer) o.classList.add('wrong-answer');
+      });
+    } else {
+      const raw = state[i] || "";
+      const norm = normalizeText(raw);
+      const accepted = (q.accept || [q.answer]).map(normalizeText);
+      isCorrect = accepted.includes(norm) && raw.trim()!=="";
+      const input = card.querySelector('input[type=text]');
+      input.style.borderBottomColor = isCorrect ? "var(--success)" : "var(--error)";
+      input.disabled = true;
+      if(!isCorrect){
+        const hintSpan = document.createElement('div');
+        hintSpan.style.fontSize="12.5px";
+        hintSpan.style.color="var(--success)";
+        hintSpan.style.marginTop="6px";
+        hintSpan.innerHTML = `<b>Correct answer:</b> ${q.answer}`;
+        input.insertAdjacentElement('afterend', hintSpan);
+      }
+    }
+
+    if(isCorrect){
+      score++;
+      topicScores[q.topic].correct++;
+      card.classList.add('correct');
+      verdict.textContent = "Correct";
+      verdict.classList.add('ok');
+    } else {
+      card.classList.add('incorrect');
+      verdict.textContent = "Incorrect";
+      verdict.classList.add('no');
+    }
+
+    card.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  });
+
+  document.getElementById('scoreBig').textContent = `${score} / ${QUESTIONS.length}`;
+  document.getElementById('scorePct').textContent = `${Math.round((score/QUESTIONS.length)*100)}% overall`;
+
+  const breakdown = document.getElementById('topicBreakdown');
+  breakdown.innerHTML = TOPICS.map(t=>{
+    const s = topicScores[t.id];
+    if(s.total===0) return "";
+    return `<div class="tb-row"><span class="name">${t.name}</span><span class="frac">${s.correct}/${s.total}</span></div>`;
+  }).join("");
+
+  document.getElementById('results').style.display = 'block';
+  document.querySelector('.action-bar').style.display = 'none';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('submitBtn').addEventListener('click', submitExam);
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  for(const k in state) delete state[k];
+  document.getElementById('results').style.display = 'none';
+  document.querySelector('.action-bar').style.display = 'flex';
+  render();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+render();
+updateProgress();
+</script>
+</body>
+</html>
